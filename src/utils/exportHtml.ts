@@ -1,8 +1,26 @@
-import { CLINIC_INFO, SPECIALTIES, VALID_DAYS, VALID_TIME_SLOTS } from './clinicLogic';
+import {
+  CLINIC_INFO,
+  SPECIALTIES,
+  VALID_DAYS,
+  VALID_TIME_SLOTS,
+  SAMPLE_IMAGES,
+  buildSampleImageDataUri,
+} from './clinicLogic';
 
 export function buildStandaloneHtmlDocument(initialTheme: 'light' | 'dark' = 'light'): string {
-  const specialtiesJson = JSON.stringify(SPECIALTIES);
+  // Embed self-contained SVG Data URIs inside the exported HTML so it works 100% standalone on GitHub Pages, Cloudflare Pages, or offline
+  const standaloneSpecialties = SPECIALTIES.map((s) => ({
+    ...s,
+    imageUrl: s.fallbackSvgUri,
+  }));
+  const specialtiesJson = JSON.stringify(standaloneSpecialties);
   const darkClass = initialTheme === 'dark' ? 'dark' : '';
+  const heroSvgUri = SAMPLE_IMAGES.heroSmileFallback;
+  const sample1SvgUri = SAMPLE_IMAGES.clinicInteriorFallback;
+  const sample2SvgUri = buildSampleImageDataUri(
+    'Atención Odontológica Integral',
+    'Estética · Ortodoncia · Implantes · General'
+  );
 
   return `<!doctype html>
 <html lang="es-UY" class="scroll-smooth ${darkClass}">
@@ -75,7 +93,7 @@ export function buildStandaloneHtmlDocument(initialTheme: 'light' | 'dark' = 'li
             Odontología general, estética, ortodoncia e implantes en un ambiente cálido, puntual y de confianza. Atendemos de lunes a viernes de 08:00 a 18:00 hs.
           </p>
           <div class="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <a href="https://wa.me/${CLINIC_INFO.whatsappNumberInternational}?text=Hola%20Dr.%20Dami%C3%A1n%20P%C3%A9rez%2C%20quisiera%20agendar%20una%20consulta." target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-sky-600 hover:bg-sky-700 dark:bg-[#00E5FF] dark:hover:bg-[#33EBFF] text-white dark:text-[#0A0F1C] font-semibold text-base shadow-sm transition-colors">
+            <a href="https://wa.me/${CLINIC_INFO.whatsappNumberInternational}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-sky-600 hover:bg-sky-700 dark:bg-[#00E5FF] dark:hover:bg-[#33EBFF] text-white dark:text-[#0A0F1C] font-semibold text-base shadow-sm transition-colors">
               Agendar por WhatsApp
             </a>
             <a href="#contacto" class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white hover:bg-slate-100 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-300 dark:border-white/15 text-sm sm:text-base font-semibold text-slate-800 dark:text-white transition-colors">
@@ -88,7 +106,7 @@ export function buildStandaloneHtmlDocument(initialTheme: 'light' | 'dark' = 'li
           <div class="rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-lg">
             <!-- Reemplazar src por tu imagen real -->
             <div class="aspect-[4/3] w-full bg-slate-200 dark:bg-slate-800 relative flex items-center justify-center">
-              <img src="https://placehold.co/800x600/e2e8f0/0f172a?text=Foto+Principal+Consultorio" alt="Consultorio Odontólogo Damián Pérez" class="w-full h-full object-cover" />
+              <img src="${heroSvgUri}" alt="Consultorio Odontólogo Damián Pérez" class="w-full h-full object-cover" />
               <div class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-slate-900/75 text-[11px] font-medium text-white">
                 Imagen de ejemplo · Consultorio
               </div>
@@ -167,11 +185,11 @@ export function buildStandaloneHtmlDocument(initialTheme: 'light' | 'dark' = 'li
         </article>
       </div>
 
-      <!-- Imágenes de ejemplo reemplazables -->
+      <!-- Imágenes de ejemplo reemplazables (SVG Data URI embebido) -->
       <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         <div class="rounded-3xl overflow-hidden bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm">
           <div class="aspect-[16/10] bg-slate-200 dark:bg-slate-800 relative">
-            <img src="https://placehold.co/800x500/e2e8f0/0f172a?text=Imagen+de+Ejemplo+1" alt="Consultorio en Ramón González 135" class="w-full h-full object-cover" />
+            <img src="${sample1SvgUri}" alt="Consultorio en Ramón González 135" class="w-full h-full object-cover" />
           </div>
           <div class="p-4 sm:p-5">
             <p class="text-sm font-bold text-slate-900 dark:text-white">Consultorio en Ramón González 135</p>
@@ -180,7 +198,7 @@ export function buildStandaloneHtmlDocument(initialTheme: 'light' | 'dark' = 'li
         </div>
         <div class="rounded-3xl overflow-hidden bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm">
           <div class="aspect-[16/10] bg-slate-200 dark:bg-slate-800 relative">
-            <img src="https://placehold.co/800x500/e2e8f0/0f172a?text=Imagen+de+Ejemplo+2" alt="Tratamientos dentales" class="w-full h-full object-cover" />
+            <img src="${sample2SvgUri}" alt="Tratamientos dentales" class="w-full h-full object-cover" />
           </div>
           <div class="p-4 sm:p-5">
             <p class="text-sm font-bold text-slate-900 dark:text-white">Odontología General, Estética, Ortodoncia e Implantes</p>
@@ -264,7 +282,7 @@ export function buildStandaloneHtmlDocument(initialTheme: 'light' | 'dark' = 'li
       <div class="hidden sm:flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
         <span class="font-bold text-slate-900 dark:text-white">${CLINIC_INFO.name}</span> · <span>Ramón González 135, Tacuarembó</span>
       </div>
-      <a href="https://wa.me/${CLINIC_INFO.whatsappNumberInternational}?text=Hola%20Dr.%20Dami%C3%A1n%20P%C3%A9rez%2C%20quisiera%20agendar%20una%20consulta." target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm transition-colors">
+      <a href="https://wa.me/${CLINIC_INFO.whatsappNumberInternational}" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm transition-colors">
         Agendar vía WhatsApp: ${CLINIC_INFO.phoneDisplay}
       </a>
     </div>
@@ -306,7 +324,7 @@ export function buildStandaloneHtmlDocument(initialTheme: 'light' | 'dark' = 'li
         '</div>' +
         '<div class="lg:col-span-5">' +
           '<div class="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-200 dark:bg-slate-800 aspect-[4/3]">' +
-            '<img src="https://placehold.co/800x600/e2e8f0/0f172a?text=' + encodeURIComponent(current.label) + '" alt="' + current.label + '" class="w-full h-full object-cover" />' +
+            '<img src="' + current.imageUrl + '" alt="' + current.label + '" class="w-full h-full object-cover" />' +
           '</div>' +
         '</div>' +
       '</div>';

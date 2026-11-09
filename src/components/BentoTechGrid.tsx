@@ -6,12 +6,12 @@ import {
   ShieldCheck,
   Clock,
   MapPin,
-  Image as ImageIcon,
 } from 'lucide-react';
-import { CLINIC_INFO } from '../utils/clinicLogic';
+import { CLINIC_INFO, SAMPLE_IMAGES } from '../utils/clinicLogic';
 
 export const BentoTechGrid: React.FC = () => {
-  const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
+  const [sample1Src, setSample1Src] = useState<string>(SAMPLE_IMAGES.clinicInterior);
+  const [sample2Src, setSample2Src] = useState<string>(SAMPLE_IMAGES.heroSmile);
 
   return (
     <section
@@ -116,19 +116,17 @@ export const BentoTechGrid: React.FC = () => {
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         <div className="rounded-3xl overflow-hidden bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm">
           <div className="aspect-[16/10] bg-slate-100 dark:bg-slate-800 relative">
-            {!imgErrors.sample1 ? (
-              <img
-                src="/src/assets/images/dental_clinic_interior_1794264094702.jpg"
-                alt="Imagen de ejemplo del consultorio odontológico"
-                referrerPolicy="no-referrer"
-                onError={() => setImgErrors((prev) => ({ ...prev, sample1: true }))}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <ImageIcon className="w-8 h-8 text-slate-400" />
-              </div>
-            )}
+            <img
+              src={sample1Src}
+              alt="Imagen de ejemplo del consultorio odontológico"
+              referrerPolicy="no-referrer"
+              onError={() => {
+                if (sample1Src !== SAMPLE_IMAGES.clinicInteriorFallback) {
+                  setSample1Src(SAMPLE_IMAGES.clinicInteriorFallback);
+                }
+              }}
+              className="w-full h-full object-cover"
+            />
             <div className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-slate-900/75 backdrop-blur-md text-[11px] font-medium text-white">
               Imagen de ejemplo 1 (Espacio para foto real)
             </div>
@@ -145,19 +143,17 @@ export const BentoTechGrid: React.FC = () => {
 
         <div className="rounded-3xl overflow-hidden bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm">
           <div className="aspect-[16/10] bg-slate-100 dark:bg-slate-800 relative">
-            {!imgErrors.sample2 ? (
-              <img
-                src="/src/assets/images/aesthetic_smile_macro_1794264096229.jpg"
-                alt="Imagen de ejemplo de tratamientos dentales"
-                referrerPolicy="no-referrer"
-                onError={() => setImgErrors((prev) => ({ ...prev, sample2: true }))}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <ImageIcon className="w-8 h-8 text-slate-400" />
-              </div>
-            )}
+            <img
+              src={sample2Src}
+              alt="Imagen de ejemplo de tratamientos dentales"
+              referrerPolicy="no-referrer"
+              onError={() => {
+                if (sample2Src !== SAMPLE_IMAGES.heroSmileFallback) {
+                  setSample2Src(SAMPLE_IMAGES.heroSmileFallback);
+                }
+              }}
+              className="w-full h-full object-cover"
+            />
             <div className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-slate-900/75 backdrop-blur-md text-[11px] font-medium text-white">
               Imagen de ejemplo 2 (Espacio para foto real)
             </div>

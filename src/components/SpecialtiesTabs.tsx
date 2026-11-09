@@ -18,10 +18,14 @@ export const SpecialtiesTabs: React.FC<SpecialtiesTabsProps> = ({
   onSelectSpecialty,
   onBookSpecialty,
 }) => {
-  const [imageErrorMap, setImageErrorMap] = useState<Record<string, boolean>>({});
+  const [fallbackActiveMap, setFallbackActiveMap] = useState<Record<string, boolean>>({});
 
   const activeSpecialty: SpecialtyData =
     SPECIALTIES.find((s) => s.id === activeSpecialtyId) ?? SPECIALTIES[0];
+
+  const currentImgSrc = fallbackActiveMap[activeSpecialty.id]
+    ? activeSpecialty.fallbackSvgUri
+    : activeSpecialty.imageUrl;
 
   return (
     <section
@@ -140,24 +144,20 @@ export const SpecialtiesTabs: React.FC<SpecialtiesTabsProps> = ({
             {/* Right Sample Image (5 cols) */}
             <div className="lg:col-span-5">
               <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800 aspect-[4/3]">
-                {!imageErrorMap[activeSpecialty.id] ? (
-                  <img
-                    src={activeSpecialty.imageUrl}
-                    alt={activeSpecialty.imageAlt}
-                    referrerPolicy="no-referrer"
-                    onError={() =>
-                      setImageErrorMap((prev) => ({
+                <img
+                  src={currentImgSrc}
+                  alt={activeSpecialty.imageAlt}
+                  referrerPolicy="no-referrer"
+                  onError={() => {
+                    if (!fallbackActiveMap[activeSpecialty.id]) {
+                      setFallbackActiveMap((prev) => ({
                         ...prev,
                         [activeSpecialty.id]: true,
-                      }))
+                      }));
                     }
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center p-6 text-center text-sm text-slate-500">
-                    {activeSpecialty.label}
-                  </div>
-                )}
+                  }}
+                  className="w-full h-full object-cover"
+                />
                 <div className="absolute bottom-3 left-3 px-3 py-1 rounded-lg bg-slate-900/75 backdrop-blur-md text-[11px] font-medium text-white">
                   Imagen de ejemplo · {activeSpecialty.label}
                 </div>

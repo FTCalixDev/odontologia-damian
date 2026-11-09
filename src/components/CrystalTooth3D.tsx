@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { motion, MotionValue, useTransform } from 'motion/react';
-import { MapPin, Clock, Star, ShieldCheck } from 'lucide-react';
-import { CLINIC_INFO } from '../utils/clinicLogic';
+import { MapPin, Clock, Star } from 'lucide-react';
+import { CLINIC_INFO, SAMPLE_IMAGES } from '../utils/clinicLogic';
 
 interface CrystalTooth3DProps {
   scrollYProgress: MotionValue<number>;
 }
 
 export const CrystalTooth3D: React.FC<CrystalTooth3DProps> = ({ scrollYProgress }) => {
-  const [imgError, setImgError] = useState(false);
+  const [imgSrc, setImgSrc] = useState<string>(SAMPLE_IMAGES.heroSmile);
   const yParallax = useTransform(scrollYProgress, [0, 0.4], [0, -30]);
 
   return (
@@ -19,22 +19,17 @@ export const CrystalTooth3D: React.FC<CrystalTooth3DProps> = ({ scrollYProgress 
       {/* Main Clean Hero Image Card (Sample Image ready for real clinic photo) */}
       <div className="relative rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-lg">
         <div className="aspect-[4/3] w-full bg-slate-100 dark:bg-slate-800 relative">
-          {!imgError ? (
-            <img
-              src="/src/assets/images/aesthetic_smile_macro_1794264096229.jpg"
-              alt="Sonrisa saludable — Consultorio Odontólogo Damián Pérez"
-              referrerPolicy="no-referrer"
-              onError={() => setImgError(true)}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center">
-              <ShieldCheck className="w-12 h-12 text-sky-600 dark:text-[#00E5FF] mb-2" />
-              <p className="text-sm font-semibold text-slate-800 dark:text-white">
-                {CLINIC_INFO.name}
-              </p>
-            </div>
-          )}
+          <img
+            src={imgSrc}
+            alt="Sonrisa saludable — Consultorio Odontólogo Damián Pérez"
+            referrerPolicy="no-referrer"
+            onError={() => {
+              if (imgSrc !== SAMPLE_IMAGES.heroSmileFallback) {
+                setImgSrc(SAMPLE_IMAGES.heroSmileFallback);
+              }
+            }}
+            className="w-full h-full object-cover"
+          />
 
           {/* Subtle Sample Photo Tag */}
           <div className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-slate-900/75 backdrop-blur-md text-[11px] font-medium text-white">

@@ -8,6 +8,7 @@ export interface SpecialtyData {
   treatments: string[];
   consultationNote: string;
   imageUrl: string;
+  fallbackSvgUri: string;
   imageAlt: string;
 }
 
@@ -55,6 +56,49 @@ export const VALID_TIME_SLOTS = [
   '16:00 a 18:00 hs',
 ] as const;
 
+export function buildSampleImageDataUri(
+  title: string,
+  subtitle: string = 'Odontólogo Damián Pérez · Tacuarembó'
+): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+    <defs>
+      <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#0f172a"/>
+        <stop offset="50%" stop-color="#1e293b"/>
+        <stop offset="100%" stop-color="#0369a1"/>
+      </linearGradient>
+      <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#0284c7" stop-opacity="0.1"/>
+      </linearGradient>
+    </defs>
+    <rect width="800" height="600" fill="url(#bg)"/>
+    <circle cx="650" cy="120" r="180" fill="url(#accent)"/>
+    <circle cx="150" cy="480" r="220" fill="url(#accent)"/>
+    <g transform="translate(400, 230)" fill="none" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-38,-55 C-62,-55 -75,-25 -68,10 C-62,40 -46,78 -32,102 C-24,115 -14,112 -10,92 C-6,72 6,72 10,92 C14,112 24,115 32,102 C46,78 62,40 68,10 C75,-25 62,-55 38,-55 C20,-55 12,-42 0,-42 C-12,-42 -20,-55 -38,-55 Z" fill="#0ea5e9" fill-opacity="0.15"/>
+    </g>
+    <text x="400" y="410" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="28" font-weight="bold">${title}</text>
+    <text x="400" y="448" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="18">${subtitle}</text>
+    <text x="400" y="485" text-anchor="middle" fill="#38bdf8" font-family="sans-serif" font-size="14">Imagen de ejemplo (Espacio listo para tu foto)</text>
+  </svg>`;
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+export const SAMPLE_IMAGES = {
+  heroSmile: 'images/ejemplo-sonrisa.jpg',
+  heroSmileFallback: buildSampleImageDataUri(
+    'Consultorio Odontológico',
+    'Ramón González 135 · Tacuarembó'
+  ),
+  clinicInterior: 'images/ejemplo-consultorio.jpg',
+  clinicInteriorFallback: buildSampleImageDataUri(
+    'Consultorio en Ramón González 135',
+    'Atención de Lunes a Viernes de 08:00 a 18:00 hs'
+  ),
+};
+
 export const SPECIALTIES: SpecialtyData[] = [
   {
     id: 'estetica',
@@ -69,7 +113,8 @@ export const SPECIALTIES: SpecialtyData[] = [
       'Cierre de espacios interdentales y remodelado estético del esmalte',
     ],
     consultationNote: 'Evaluación personalizada y presupuesto claro en tu primera consulta.',
-    imageUrl: '/src/assets/images/aesthetic_smile_macro_1794264096229.jpg',
+    imageUrl: SAMPLE_IMAGES.heroSmile,
+    fallbackSvgUri: buildSampleImageDataUri('Estética Dental', 'Blanqueamiento, Carillas y Restauraciones'),
     imageAlt: 'Imagen de referencia de estética dental',
   },
   {
@@ -85,7 +130,8 @@ export const SPECIALTIES: SpecialtyData[] = [
       'Placas de descanso y contención para bruxismo o tensión mandibular',
     ],
     consultationNote: 'Seguimiento mensual directo con el Dr. Damián Pérez.',
-    imageUrl: '/src/assets/images/dental_clinic_interior_1794264094702.jpg',
+    imageUrl: SAMPLE_IMAGES.clinicInterior,
+    fallbackSvgUri: buildSampleImageDataUri('Ortodoncia', 'Alineación Dental para Niños, Jóvenes y Adultos'),
     imageAlt: 'Imagen de referencia de atención ortodóncica',
   },
   {
@@ -101,7 +147,8 @@ export const SPECIALTIES: SpecialtyData[] = [
       'Procedimientos cuidadosos con anestesia local sin dolor y controles postoperatorios',
     ],
     consultationNote: 'Plan de tratamiento detallado paso a paso antes de comenzar.',
-    imageUrl: '/src/assets/images/dental_clinic_interior_1794264094702.jpg',
+    imageUrl: SAMPLE_IMAGES.clinicInterior,
+    fallbackSvgUri: buildSampleImageDataUri('Implantes Dentales', 'Rehabilitación Fija y Segura'),
     imageAlt: 'Imagen de referencia de consultorio para implantes',
   },
   {
@@ -117,7 +164,8 @@ export const SPECIALTIES: SpecialtyData[] = [
       'Extracciones simples, prótesis removibles y odontología preventiva',
     ],
     consultationNote: 'Atención puntual de lunes a viernes en el centro de Tacuarembó.',
-    imageUrl: '/src/assets/images/aesthetic_smile_macro_1794264096229.jpg',
+    imageUrl: SAMPLE_IMAGES.heroSmile,
+    fallbackSvgUri: buildSampleImageDataUri('Odontología General', 'Prevención, Limpiezas y Salud Integral'),
     imageAlt: 'Imagen de referencia de odontología general',
   },
 ];

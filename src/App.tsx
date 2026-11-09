@@ -17,7 +17,6 @@ import {
 import {
   CLINIC_INFO,
   SpecialtyId,
-  buildWhatsAppBookingUrl,
 } from './utils/clinicLogic';
 import { triggerStandaloneHtmlDownload } from './utils/exportHtml';
 import { CrystalTooth3D } from './components/CrystalTooth3D';
@@ -94,13 +93,7 @@ export default function App() {
     whatsappUrl: string;
   } | null>(null);
 
-  const directWhatsAppHref = buildWhatsAppBookingUrl({
-    patientName: 'Consulta Web',
-    phone: CLINIC_INFO.phoneDisplay,
-    specialtyId: activeSpecialtyId,
-    preferredDay: 'Miércoles',
-    preferredTimeSlot: '10:00 a 12:00 hs',
-  });
+  const directWhatsAppHref = `https://wa.me/${CLINIC_INFO.whatsappNumberInternational}`;
 
   const handleOpenBooking = (specialtyId: SpecialtyId = activeSpecialtyId) => {
     setActiveSpecialtyId(specialtyId);
@@ -302,7 +295,7 @@ export default function App() {
         />
       </main>
 
-      {/* Clean Footer with HTML Download Shortcut Info */}
+      {/* Clean Footer */}
       <footer className="border-t border-slate-200 dark:border-white/10 py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto text-xs sm:text-sm text-slate-500 dark:text-slate-400">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
@@ -314,21 +307,9 @@ export default function App() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2 font-mono-tabular text-slate-700 dark:text-slate-200 font-semibold">
-              <PhoneCall className="w-4 h-4 text-sky-600 dark:text-[#00E5FF]" aria-hidden="true" />
-              <span>Tel / WhatsApp: {CLINIC_INFO.phoneDisplay}</span>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleDownloadHtml}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-200/80 hover:bg-slate-300 dark:bg-white/10 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 text-xs font-medium transition-colors cursor-pointer"
-              title="Atajo de teclado: Alt + D o Ctrl + Shift + D"
-            >
-              <Download className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>Descargar .HTML (Alt + D)</span>
-            </button>
+          <div className="flex items-center gap-2 font-mono-tabular text-slate-700 dark:text-slate-200 font-semibold">
+            <PhoneCall className="w-4 h-4 text-sky-600 dark:text-[#00E5FF]" aria-hidden="true" />
+            <span>Tel / WhatsApp: {CLINIC_INFO.phoneDisplay}</span>
           </div>
         </div>
       </footer>

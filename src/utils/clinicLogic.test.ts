@@ -73,12 +73,14 @@ test('buildWhatsAppBookingUrl builds valid wa.me URL with Uruguayan country code
   assert.equal(getSpecialtyById('estetica').label, 'Estética Dental');
 });
 
-test('buildStandaloneHtmlDocument generates a complete valid HTML document', () => {
+test('buildStandaloneHtmlDocument generates a complete valid HTML document with embedded SVG sample images and direct WhatsApp link', () => {
   const html = buildStandaloneHtmlDocument('light');
   assert.ok(html.startsWith('<!doctype html>'));
   assert.ok(html.includes('Odontólogo Damián Pérez'));
   assert.ok(html.includes('Ramón González 135, Tacuarembó, Uruguay'));
   assert.ok(html.includes('099 186 996'));
+  assert.ok(html.includes('data:image/svg+xml;charset=UTF-8,'));
+  assert.ok(html.includes('href="https://wa.me/59899186996"'));
   assert.ok(html.includes('theme-toggle-btn'));
   assert.ok(html.includes('</html>'));
 });
