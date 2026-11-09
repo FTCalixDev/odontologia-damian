@@ -1,0 +1,6 @@
+{
+  "name": "Odontólogo Damián Pérez — Odontología de Precisión",
+  "description": "Clínica odontológica de alta precisión en Tacuarembó, Uruguay. Especialistas en Estética Dental, Ortodoncia, Implantes y Rehabilitación Oral con tecnología 3D.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
